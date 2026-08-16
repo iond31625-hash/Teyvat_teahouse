@@ -1,0 +1,84 @@
+// --- ЛОГИКА ЗАКАЗА И ЦЕРЕМОНИИ ---
+        function orderItem(name, icon) {
+            document.getElementById('ceremony').scrollIntoView({ behavior: 'smooth' });
+
+            const status = document.getElementById('ceremony-status');
+            const desc = document.getElementById('ceremony-desc');
+            const cupDisplay = document.getElementById('cup-display');
+            const itemIcon = document.getElementById('item-icon');
+            const bar = document.getElementById('progress-bar');
+            const fill = document.getElementById('progress-fill');
+            const btn = document.getElementById('action-btn');
+
+            btn.style.display = 'none';
+            cupDisplay.style.display = 'none';
+            bar.style.display = 'block';
+            fill.style.width = '0%';
+            itemIcon.innerText = icon;
+
+            status.innerText = "Подготовка: " + name;
+            status.style.color = "var(--gold)";
+            desc.innerText = "Подождите, ваш заказ готовится...";
+
+            setTimeout(() => { fill.style.width = '30%'; }, 500);
+            setTimeout(() => { fill.style.width = '70%'; desc.innerText = "Ещё немного..."; }, 1500);
+            setTimeout(() => { 
+                fill.style.width = '100%'; 
+                setTimeout(() => {
+                    bar.style.display = 'none';
+                    cupDisplay.style.display = 'inline-block';
+                    status.innerText = name + " готов!";
+                    status.style.color = "var(--jade)";
+                    desc.innerText = "Наслаждайтесь вкусом и атмосферой.";
+                    btn.style.display = 'inline-block';
+                    
+                    if(icon === '🍷'  icon === '🍹'  icon === '🍵' || icon === '🌿') {
+                        btn.innerText = "Выпить";
+                    } else {
+                        btn.innerText = "Съесть";
+                    }
+                }, 500);
+            }, 2500);
+        }
+
+        function consumeItem() {
+            const status = document.getElementById('ceremony-status');
+            const desc = document.getElementById('ceremony-desc');
+            const cupDisplay = document.getElementById('cup-display');
+            const btn = document.getElementById('action-btn');
+
+            cupDisplay.style.display = 'none';
+            btn.style.display = 'none';
+            
+            status.innerText = "Восхитительно!";
+            status.style.color = "var(--gold)";
+            desc.innerText = "Желаете заказать что-нибудь ещё?";
+        }
+
+        // --- ЛОГИКА RP ЧАТА ---
+        function sendRP(e) {
+            e.preventDefault();
+            const nameInput = document.getElementById('rp-name');
+            const actionInput = document.getElementById('rp-action');
+            const log = document.getElementById('rp-log');
+
+            const name = nameInput.value.trim();
+            let action = actionInput.value.trim();
+
+            if (name && action) {
+                if (!action.startsWith('*')) action = '*' + action;
+                if (!action.endsWith('*')) action = action + '*';
+
+                const msgDiv = document.createElement('div');
+                msgDiv.className = 'rp-message';
+                msgDiv.innerHTML = <span class="rp-author">${name}:</span> <span class="rp-text">${action}</span>;
+                
+                log.appendChild(msgDiv);
+                log.scrollTop = log.scrollHeight; 
+                
+                actionInput.value = ''; 
+            }
+        }
+    </script>
+</body>
+</html>
